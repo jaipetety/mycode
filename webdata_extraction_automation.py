@@ -3,12 +3,12 @@ import requests
 from bs4 import BeautifulSoup
 import pandas as pd
 
-no_pages =4
+no_pages = 4
 user_data = {'username': 'sravani','password': 'visualpath@_123'}
 output_file_path = 'file2.csv'
 
 headers = {'user-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36'}
-url_headers =['login','logout','enquiryusersnew','enquiryusersnew_page']
+url_headers = ['login','logout','enquiryusersnew','enquiryusersnew_page']
 parse_fields = ['Ser No','User Name','Email Id','Location','Phone Number','user choosen Course','Message','Date','Enquiry Submitted From','View']
 
 def html_parse(enquiry_response):
@@ -36,7 +36,7 @@ def urls(process):
     return urls_dict.get(process)
 
 def get_page_nos(enquiry_response,no_pages):
-    pages=[]
+    pages = []
     doc = BeautifulSoup(enquiry_response,"html.parser")
 
     p1 = doc.strong.string
@@ -75,12 +75,9 @@ def main():
                     for page in reversed(pages):
                         enquiry_page_request = s.get(urls(url_headers[3]) + str(page),headers = headers) #Enquiry page request
                         if(enquiry_page_request.status_code == 200): enquiry_result += html_parse(enquiry_page_request.text)
-
                     if(len(enquiry_result) !=0): save_csv(enquiry_result,output_file_path)
-
                     logout_request = s.get(urls(url_headers[1]),headers = headers) #Logout request
-                    if(logout_request.status_code != 200): error_response(3)
-                    
+                    if(logout_request.status_code != 200): error_response(3)                    
                 else: error_response(2)                  
             else: error_response(1)          
     finally:
