@@ -27,13 +27,12 @@ def html_parse(enquiry_response):
         parse_result.append(field_data_dict.copy())    
     return parse_result
 
-def urls(process):
+def urls(link):
     urls_dict = {'login' : 'https://www.visualpath.in/visualpathadmin/index.php',
                  'logout' : 'https://www.visualpath.in/visualpathadmin/logout.php',
                  'enquiryusersnew' : 'https://www.visualpath.in/visualpathadmin/enquiryusersnew.php',
-                 'enquiryusersnew_page':'https://www.visualpath.in/visualpathadmin/enquiryusersnew.php?page_no='}
-    
-    return urls_dict.get(process)
+                 'enquiryusersnew_page':'https://www.visualpath.in/visualpathadmin/enquiryusersnew.php?page_no='}    
+    return urls_dict.get(link)
 
 def get_page_nos(enquiry_response,no_pages):
     pages = []
@@ -68,7 +67,6 @@ def main():
             login_request = s.post(urls(url_headers[0]), data=user_data,headers = headers) #Login request
             if(login_request.status_code == 200):
                 enquiry_request = s.get(urls(url_headers[2]),headers = headers) #Enquiry request
-
                 if(enquiry_request.status_code == 200):
                     pages = get_page_nos(enquiry_request.text,no_pages) 
                     #Get page by info
